@@ -7,8 +7,6 @@
 配置、日志、领域事件、缓存接口、Social OAuth 2.0（QQ、微博）、Ioc、Respository for Dapper\EntityFramework、FluentValidator for Asp.Net Core、Asp.Net Identity with Dapper
 
 
->nuget地址： http://10.66.2.49:8081/repository/nuget-group/
-
 ---
 
 **关于数据库**   
@@ -25,10 +23,6 @@ EntityFramework |      Y      |    Y               |    N
 
 ---
 
-# 开发文档
-
->http://10.66.2.13/InfrastructureTeam/Docs/blob/master/Schubert/ReadMe.md
-
 **配置文件架构（schema）**
 
 Schubert 使用 asp.net core 的标准配置模型，你可以通过任意格式（如XML、JSON等）文件，甚至自定义方式对 Schubert 框架的内置功能进行配置。    
@@ -39,19 +33,12 @@ Schubert 使用 asp.net core 的标准配置模型，你可以通过任意格式
 
 >`v2.0.*`
 
->catalog schema : http://dev.labijie.com/schubert/v2.0/catalog.json
+>catalog schema : schemas/catalog.json
 
->appsettings schema : http://dev.labijie.com/schubert/v2.0/module.json   
+>appsettings schema : schemas/module.json   
 
->module schema : http://dev.labijie.com/schubert/v2.0/appsettings.json
+>module schema : schemas/appsettings.json
 
-
-**Web项目打包发布使用说明** 
-> VS2017:
-[点击这里](http://10.66.2.13/InfrastructureTeam/Schubert/blob/master/src/Tooling/dotnet-modularity/ReadMe.md)
-
-> VS2015（旧版）:
-[点击这里](http://10.66.2.13/InfrastructureTeam/Schubert/blob/master/src/Tooling/Schubert.Framework.Modularity.Tools/ReadMe.md)
 
 # QuickStart
 
