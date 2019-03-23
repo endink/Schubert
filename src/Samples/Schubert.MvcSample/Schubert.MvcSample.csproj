@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>Schubert.MvcSample</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>Schubert.MvcSample</PackageId>
+    <AssetTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net451+win8</AssetTargetFallback>
+    <RuntimeFrameworkVersion>2.1</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup> 
+    <None Update="wwwroot\**\*;*.cer">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework\Schubert.Framework.Caching.Redis\Schubert.Framework.Caching.Redis.csproj" />
+    <ProjectReference Include="..\..\Framework\Schubert.Framework.Scheduling\Schubert.Framework.Scheduling.csproj" />
+    <ProjectReference Include="..\..\Framework\Schubert.Framework.Web.Dapper\Schubert.Framework.Web.Dapper.csproj" />
+    <ProjectReference Include="..\..\Framework\Schubert.Framework.Web.FluentValidation\Schubert.Framework.Web.FluentValidation.csproj" />
+    <ProjectReference Include="..\..\Framework\Schubert.Framework\Schubert.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <DotNetCliToolReference Include="Schubert.Framework.Modularity.Tools.Vs2017" Version="*" />
+  </ItemGroup>
+
+
+  <Target Name="Modularity" AfterTargets="AfterPublish">
+    <Message Text="publishUrl=$(publishUrl)"></Message>
+    <Exec Command="dotnet modularity __config $(MSBuildProjectFullPath) __dest $(PublishDir)"></Exec>
+  </Target>-->
+
+
+
+</Project>

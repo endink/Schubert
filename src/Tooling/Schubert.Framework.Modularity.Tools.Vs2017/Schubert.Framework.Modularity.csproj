@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\dependencies.props" />
+  <PropertyGroup>
+    <AssemblyName>dotnet-modularity</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <RuntimeIdentifiers>win7-x64;win7-x86;ubuntu.14.04-x64;ubuntu.16.04-x64;centos.7-x64;</RuntimeIdentifiers>
+    <TargetFramework></TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <PackageType>DotnetCliTool</PackageType>
+    <PackageId>Schubert.Framework.Modularity</PackageId>
+    <Product>Schubert</Product>
+    <Description>VS2017 Schubert Framework Modularity Tool</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build" Version="15.8.166" />
+  </ItemGroup>
+</Project>

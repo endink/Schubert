@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Schubert.Framework.Modularity.Tools.Vs2017": {
+      "commandName": "Project",
+      "commandLineArgs": "--c d:\\Schubert.MvcSample.csproj --dest D:\\mmm"
+    }
+  }
+}

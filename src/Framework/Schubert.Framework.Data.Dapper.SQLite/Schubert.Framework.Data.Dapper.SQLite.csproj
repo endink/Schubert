@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\dependencies.props" />
+  <PropertyGroup>
+    <Description>Compiste web application development framework, application development infrastructure. SchuberFramework core class libraries.</Description>
+    <AssemblyTitle>Schubert.Framework.Data.Dapper.SQLite</AssemblyTitle>
+    <AssemblyName>Schubert.Framework.Data.Dapper.SQLite</AssemblyName> 
+    <PackageId>Schubert.Framework.Data.Dapper.SQLite</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="2.1.0" /> 
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Schubert.Framework.Data.Dapper\Schubert.Framework.Data.Dapper.csproj" />
+  </ItemGroup>
+</Project>

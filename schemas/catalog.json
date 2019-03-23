@@ -1,0 +1,18 @@
+{
+  "$schema": "http://dev.labijie.com/schubert/v2.0/appsettings.json",
+  "version": 1.0,
+  "schemas": [
+    {
+      "name": "appsettings.json",
+      "description": "模块清单文件架构定义",
+      "fileMatch": [ "appsettings.json" ],
+      "url": "http://dev.labijie.com/schubert/v2.0/appsettings.json"
+    },
+    {
+      "name": "module.json",
+      "description": "模块清单文件架构定义",
+      "fileMatch": [ "module.json" ],
+      "url": "http://dev.labijie.com/schubert/v2.0/module.json"
+    }
+  ]
+}

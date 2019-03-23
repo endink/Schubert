@@ -1,0 +1,39 @@
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>3.1</VersionPrefix>
+    <ExperimentalProjectVersionPrefix>0.1.0</ExperimentalProjectVersionPrefix>
+    <VersionSuffix>beta4-05010000</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == 'rtm' ">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != 'rtm' ">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <PackageProjectUrl>https://github.com/endink</PackageProjectUrl>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Anders Xiao</Authors>
+    <Copyright>Copyright labijie.com</Copyright>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyOriginatorKeyFile>..\..\..\assembly.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <AssetTargetFallback Condition=" '$(TargetFramework)' == 'netstandard2.0' ">$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AspNetCorePackageVersion>2.1.1</AspNetCorePackageVersion>
+    <MicrosoftExtensionPackageVersion>2.1.1</MicrosoftExtensionPackageVersion>
+    <EntityFrameworkPackageVersion>2.1.2</EntityFrameworkPackageVersion>
+    <DotNetCorePackageVersion>4.5.0</DotNetCorePackageVersion>
+    <SystemPackageVersion>4.3.0</SystemPackageVersion>
+    <IdentityStorePackageVersion>2.1.3</IdentityStorePackageVersion>
+    <NetStandardLibVersion>2.0.3</NetStandardLibVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);COREFX</DefineConstants>
+  </PropertyGroup>
+</Project>

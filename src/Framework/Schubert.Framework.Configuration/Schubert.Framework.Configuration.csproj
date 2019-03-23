@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Compiste web application development framework, application development infrastructure. Configuration center client.</Description>
+    <Copyright>Copyright gznb.com</Copyright>
+    <AssemblyTitle>Schubert.Framework.Configuration</AssemblyTitle>
+    <VersionPrefix>2.1.0</VersionPrefix>
+    <Authors>GZNB Infrastructure Team;Sharping</Authors>
+    <TargetFrameworks>net461;netstandard1.6</TargetFrameworks>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>Schubert.Framework.Configuration</AssemblyName>
+    <PackageId>Schubert.Framework.Configuration</PackageId>
+    <PackageTags>Composite;Modular;Framework;SchubertFramework;configuration;zookeeper</PackageTags>
+    <PackageProjectUrl>http://gznb.com</PackageProjectUrl>
+    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dotnet5.6;portable-net45+netcore45+wp8+wp81+wpa81</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="rsa_private_key.pem" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Schubert.Zookeeper\Schubert.Zookeeper.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <DefineConstants>$(DefineConstants);SILVERLIGHT</DefineConstants>
+  </PropertyGroup>
+</Project>

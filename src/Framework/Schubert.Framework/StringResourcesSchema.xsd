@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.labiji.com/LanguageXMLSchema" xmlns="http://www.labiji.com/LanguageXMLSchema"
+           xmlns:lbj="http://www.labiji.com/LanguageXMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="language">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="resource" type="lbj:resourceItem" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+      <xs:attribute name="culture" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="resourceItem">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="dynamic" type="xs:boolean" use="optional" default="false" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+</xs:schema>

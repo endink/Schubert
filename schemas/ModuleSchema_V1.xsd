@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.labiji.com/ModuleXMLSchema" xmlns="http://www.labiji.com/ModuleXMLSchame"
+           xmlns:lbj="http://www.labiji.com/ModuleXMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="manifest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="module" type="lbj:module" minOccurs="1" maxOccurs="1" />
+      </xs:sequence>
+      <xs:attribute name="schemaVersion" fixed="1.0" use="required" />
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="module">
+    <xs:sequence>
+      <xs:element name="supportVersions" type="lbj:versionArray" minOccurs="0" maxOccurs="1" />
+      <xs:element name="description" type="lbj:description" minOccurs="1" maxOccurs="1" />
+      <xs:element name="dependencies" type="lbj:property" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="features" type="lbj:featureArray" minOccurs="0" maxOccurs="1">
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" use="required" type="xs:string" />
+    <xs:attribute name="author" use="required" type="xs:string" />
+    <xs:attribute name="version" use="required" type="xs:string" />
+    <xs:attribute name="category" use="optional" type="xs:string" />
+    <xs:attribute name="includeUserInterface" default="true" type="xs:boolean" />
+  </xs:complexType>
+
+  <xs:complexType name="versionArray">
+    <xs:sequence>
+      <xs:element name="version" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string" />
+          </xs:simpleContent>  
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="property">
+    <xs:simpleContent>
+      <xs:extension base="xs:string" />
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="description">
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="resourceName" type="xs:string" use="optional" />
+        </xs:extension>
+      </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="featureArray">
+    <xs:sequence>
+      <xs:element name="feature" type="lbj:feature" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="feature">
+    <xs:sequence>
+      <xs:element name="description" type="lbj:description" minOccurs="1" maxOccurs="1" />
+      <xs:element name="dependencies" type="lbj:property" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="name" use="required" type="xs:string" />
+    <xs:attribute name="category" use="optional" type="xs:string" />
+    <xs:attribute name="priority" use="optional" type="xs:int" default="1" />
+  </xs:complexType>
+</xs:schema>

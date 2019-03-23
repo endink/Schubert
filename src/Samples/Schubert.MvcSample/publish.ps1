@@ -1,0 +1,1 @@
+dotnet publish Schubert.MvcSample.csproj --runtime 'ubuntu.16.04-x64' --configuration Release --output ./publish

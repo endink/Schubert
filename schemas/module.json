@@ -1,0 +1,106 @@
+﻿{
+  "id": "http://dev.labijie.com/schubert/moduleschema",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "模块清单文件架构定义",
+
+  "type": "object",
+
+  "properties": {
+
+    "name": {
+      "type": "string",
+      "description": "定义模块名称。"
+    },
+
+    "author": {
+      "type": "string",
+      "description": "定义模块作者"
+    },
+
+    "includeUserInterface": {
+      "type": "boolean",
+      "description": "指示模块是否包含用户控件"
+    },
+
+    "version": {
+      "type": "string",
+      "description": "指示模块版本号"
+    },
+
+    "rootNamespace": {
+      "type": "string",
+      "description": "模块程序集命名空间。"
+    },
+
+    "description": {
+      "type": "string",
+      "description": "定义模块的描述信息"
+    },
+
+    "category": {
+      "type": "string",
+      "description": "定义模块的分类信息"
+    },
+
+    "supportVersions": {
+      "type": "array",
+      "description": "指示模块支持的应用版本，如果不指明表示全部支持",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "dependencies": {
+      "type": "array",
+      "description": "指示模块的依赖项（该模块依赖的模块）",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "features": {
+      "type": "array",
+      "description": "指示模块的中包含的特性集",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+
+        "properties": {
+
+          "name": {
+            "type": "string",
+            "description": "定义特性名称。"
+          },
+
+          "priority": {
+            "type": "integer",
+            "description": "功能优先级，不指定默认为 1"
+          },
+
+          "description": {
+            "type": "string",
+            "description": "定义特性的描述信息"
+          },
+
+          "category": {
+            "type": "string",
+            "description": "定义特性的分类信息"
+          },
+
+          "dependencies": {
+            "type": "array",
+            "description": "指示特性的依赖项（该特性依赖的特性）",
+            "minItems": 0,
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [ "name", "description" ]
+      }
+    }
+  }, 
+  "required": ["name", "author", "description", "version"]
+}

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\dependencies.props" />
+  <PropertyGroup>
+    <Description>zookeeper client, that makes life a little easier.</Description>
+    <AssemblyTitle>Schubert.Zookeeper</AssemblyTitle>
+    <AssemblyName>Schubert.Zookeeper</AssemblyName>
+    <PackageId>Schubert.Zookeeper</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Schubert.Framework\Schubert.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZooKeeperNetEx" Version="3.4.12" />
+  </ItemGroup>
+ 
+</Project>
