@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Schubert.Framework.Environment;
@@ -84,13 +87,22 @@ namespace Schubert.Framework.Data
 
             this.DbConfigurings[typeof(TContext)] = c =>
             {
+                var configure = new Action<IServiceProvider, DbContextOptionsBuilder>((sp, b) =>
+               {
+                   var options = sp.GetRequiredService<IOptions<DbOptions>>();
+                   settings.DbProvider.OnBuildContext(typeof(TContext), b, options.Value);
+                   b.UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>());
+                   b.Options.WithExtension<IDbContextOptionsExtension>(new DbSettingsrExtension(settings));
+                   b.ReplaceService<IModelCustomizer, SchubertModelCustomizer>();
+               });
 
-                c.AddDbContext<TContext>(optionsAction: (sp, b) =>
+                if (settings.UsePool) {
+                    c.AddDbContextPool<TContext>(configure, settings.PoolSize);
+                }
+                else
                 {
-                    var options = sp.GetRequiredService<IOptions<DbOptions>>();
-                    settings.DbProvider.OnBuildContext(typeof(TContext), b, options.Value);
-                    b.UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>());
-                });
+                    c.AddDbContext<TContext>(optionsAction: configure);
+                }
             };
 
             if (builder.IsDefaultDbContext)

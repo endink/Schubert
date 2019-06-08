@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Schubert.Framework.Data.Mappings;
+using Schubert.Framework.Environment;
 using Schubert.Framework.Environment.ShellBuilders;
 using System;
 using System.Collections.Concurrent;
@@ -18,14 +19,10 @@ using System.Threading.Tasks;
 
 namespace Schubert.Framework.Data.EntityFramework
 {
-    public class DatabaseInitializer : IDatabaseInitializer
+    public class DatabaseInitializer
     {
-        private DbOptions _options;
-        private IEnumerable<IEntityMappings> _entityMappings = null;
-        private ILogger _logger = null;
-        private ILoggerFactory _loggerFactory;
-        private ShellContext _shellContext = null;
         private ConcurrentDictionary<Type, SyncCreation> _contextCreationSync = null;
+        private DbOptions _dbOptions;
 
         private class SyncCreation
         {
@@ -34,36 +31,31 @@ namespace Schubert.Framework.Data.EntityFramework
             public bool Checked { get; set; }
         }
 
-        public DatabaseInitializer(
-            ShellContext shellContext,
-            IOptions<DbOptions> options,
-            IEnumerable<IEntityMappings> mappings,
-            ILoggerFactory loggerFactory)
+        public static readonly DatabaseInitializer Default = new DatabaseInitializer();
+
+        private DbOptions GetDbOptions(DbContext context)
         {
-            Guard.ArgumentNotNull(loggerFactory, nameof(loggerFactory));
-            Guard.ArgumentNotNull(options, nameof(options));
-            Guard.ArgumentNotNull(mappings, nameof(mappings));
-            Guard.ArgumentNotNull(shellContext, nameof(shellContext));
+            if (_dbOptions == null)
+            {
+                _dbOptions = context.GetDbOptions() ?? throw new SchubertException("IOptions<DbOptions> cant not be null.");
+            }
+            return _dbOptions;
+        }
 
+        private DatabaseInitializer() {
             _contextCreationSync = new ConcurrentDictionary<Type, SyncCreation>();
-            _logger = loggerFactory?.CreateLogger<DatabaseInitializer>() ?? (ILogger)NullLogger.Instance;
-            _entityMappings = mappings;
-            _options = options.Value;
-            _shellContext = shellContext;
-            _loggerFactory = loggerFactory;
-
         }
 
         private void SkipMigrations(DbContext dbContext)
         {
-            IServiceProvider provider = ((IInfrastructure<IServiceProvider>)dbContext).Instance;
             IHistoryRepository historyRepository = dbContext.Database.GetService<IHistoryRepository>();
             IMigrationsAssembly migrationAssembly = dbContext.Database.GetService<IMigrationsAssembly>();
             //IMigrationsAssembly migrationAssembly = (IMigrationsAssembly)ActivatorUtilities.CreateInstance(provider, typeof(MigrationFinder), _shellContext);
             var ids = migrationAssembly.Migrations.Keys;
 
             StringBuilder builder = new StringBuilder();
-            bool exist = _options.GetDbProvider(dbContext.GetType()).ExistTables(_options, dbContext, new string[] { HistoryRepository.DefaultTableName });
+            var options = GetDbOptions(dbContext);
+            bool exist = options.GetDbProvider(dbContext.GetType()).ExistTables(options, dbContext, new string[] { HistoryRepository.DefaultTableName });
             if (!exist)
             {
                 builder.AppendLine(historyRepository.GetCreateScript());
@@ -84,27 +76,29 @@ namespace Schubert.Framework.Data.EntityFramework
             where T : DbContext, INewDatabaseFlag
         {
             Type dbContextType = context.GetType();
-            var database = context.Database;
-            var provider = _options.GetDbProvider(dbContextType);
-            var tables = _options.GetTablesForChecking(dbContextType);
-            if (_options.CreateDatabaseIfNotExisting)
+            var sync = _contextCreationSync.GetOrAdd(dbContextType, new SyncCreation());
+            if (!sync.Checked)
             {
-                if (tables.IsNullOrEmpty())
+                lock (sync.SyncRoot)
                 {
-                    throw new SchubertException("CreateDatabaseIfNotExisting 配置为 true （默认值）， 必须使用 TablesForCheckingDatabaseExists 来设置用于检查数据库的表。");
-                }
-                var sync = _contextCreationSync.GetOrAdd(dbContextType, new SyncCreation());
-                if (!sync.Checked)
-                {
-                    lock (sync.SyncRoot)
+                    if (!sync.Checked)
                     {
-                        if (!sync.Checked)
+                        var database = context.Database;
+
+                        var options = GetDbOptions(context);
+                        var provider = options.GetDbProvider(dbContextType);
+                        var tables = options.GetTablesForChecking(dbContextType);
+                        if (options.CreateDatabaseIfNotExisting)
                         {
+                            if (tables.IsNullOrEmpty())
+                            {
+                                throw new SchubertException("CreateDatabaseIfNotExisting 配置为 true （默认值）， 必须使用 TablesForCheckingDatabaseExists 来设置用于检查数据库的表。");
+                            }
                             if (!context.GetType().Equals(typeof(ShellDescriptorDbContext)))
                             {
                                 bool created = database.EnsureCreated();
                                 var providerServices = database.GetService<IRelationalDatabaseCreator>();
-                                bool existedTables = provider.ExistTables(_options, context, tables);
+                                bool existedTables = provider.ExistTables(options, context, tables);
                                 if (!existedTables)
                                 {
                                     providerServices.CreateTables();
@@ -117,51 +111,11 @@ namespace Schubert.Framework.Data.EntityFramework
                             }
 
                             sync.Checked = true;
+
                         }
                     }
                 }
             }
-        }
-
-        public void CreateModel(ModelBuilder builder, DbContext context)
-        {
-            var contextType = context.GetType();
-
-            var dbProvider = _options.GetDbProvider(contextType);
-            dbProvider.OnCreateModel(builder, _options); 
-
-            //当 Shell 没创建时候不会产生任何的 Mapping
-            foreach (var mapping in _entityMappings)
-            {
-                DbContextSelectionAttribute att = mapping.GetType().GetAttribute<DbContextSelectionAttribute>();
-                DbContextAttribute att2 = mapping.GetType().GetAttribute<DbContextAttribute>();
-                if ((att == null && att2 == null && contextType.Equals(_options.DefaultDbContext)) || (att?.ContextType == contextType || att2?.ContextType == contextType))
-                {
-                    mapping.ApplyMapping(builder, dbProvider);
-                }
-            }
-
-
-            bool mapBuiltinEntities = _options.IncludeBuiltinEntities(contextType);
-            if (mapBuiltinEntities)
-            {
-                foreach (var mapping in this.GetBuiltinMappings())
-                {
-                    mapping.ApplyMapping(builder, dbProvider);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 获取 Schubert 框架内置的映射。
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerable<IEntityMappings> GetBuiltinMappings()
-        {
-            yield return new LanguageMapping();
-            yield return new PermissionMapping();
-            yield return new PermissionRoleMapping();
-            yield return new StringResourceMapping();
         }
     }
 }

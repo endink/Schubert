@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Schubert.Framework;
 using Schubert.Framework.Data;
 using Schubert.Framework.DependencyInjection;
 using Schubert.Framework.Environment.Modules;
@@ -64,7 +65,7 @@ namespace Schubert
                 action(builder.ServiceCollection);
             }
 
-            builder.ServiceCollection.AddSmart(ServiceDescriber.Scoped<DbContextResources>(
+            builder.ServiceCollection.AddSmart(ServiceDescriber.Scoped(
                 s => 
                 {
                     IOptions<DbOptions> dbOps = s.GetRequiredService<IOptions<DbOptions>>();

@@ -1,7 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Schubert.Framework.Data;
+using Schubert.Framework.Environment;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -48,6 +52,26 @@ namespace Schubert
                     e.State = EntityState.Detached;
                 }
             }
+        }
+
+        public static IServiceProvider GetApplicationServiceProvider(this DbContext context)
+        {
+            IServiceProvider serviceProvider = ((IInfrastructure<IServiceProvider>)context).Instance;
+            var options = serviceProvider.GetRequiredService<IDbContextOptions>();
+            var applicationServiceProvider = options.FindExtension<CoreOptionsExtension>().ApplicationServiceProvider;
+            return applicationServiceProvider;
+        }
+
+        public static DbOptions GetDbOptions(this DbContext context)
+        {
+            var applicationServiceProvider = context.GetApplicationServiceProvider();
+            
+            return applicationServiceProvider.GetRequiredService<IOptions<DbOptions>>().Value;
+        }
+
+        public static IDbProvider GetDbProvider(this DbContext context)
+        {
+            return context.GetDbOptions().GetDbProvider(context.GetType());
         }
 
         public static IDatabaseTransaction BeginTransaction(this DbContext dbContext, IsolationLevel level = IsolationLevel.ReadCommitted)

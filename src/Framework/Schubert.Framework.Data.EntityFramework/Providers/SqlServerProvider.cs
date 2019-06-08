@@ -8,6 +8,8 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
 
 namespace Schubert.Framework.Data.Providers
 {
@@ -17,6 +19,7 @@ namespace Schubert.Framework.Data.Providers
 
         public string IdentifierStuffix => "]";
         public string ParameterPrefix => "@";
+       
 
         public PropertyBuilder<string> StringColumnLength(PropertyBuilder<string> pb, int length)
         {

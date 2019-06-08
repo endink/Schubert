@@ -24,8 +24,10 @@ namespace Schubert.Framework.Data
             IDbProvider provider, 
             IEnumerable<String> tablesForCheck, 
             bool isDefault,
-            String connectionString)
-            : this(connectionName, migrationAssembly?.FullName, addServiceEntities, provider, tablesForCheck, isDefault, connectionString)
+            String connectionString,
+            bool usePool = true,
+            int poolSize = 128)
+            : this(connectionName, migrationAssembly?.FullName, addServiceEntities, provider, tablesForCheck, isDefault, connectionString, usePool, poolSize)
         {
         }
 
@@ -36,7 +38,9 @@ namespace Schubert.Framework.Data
             IDbProvider provider, 
             IEnumerable<String> tablesForCheck,
             bool isDefaultContext,
-            String connectionString)
+            String connectionString,
+            bool usePool,
+            int poolSize = 128)
         {
             this.DbProvider = provider ?? DbOptions.SqliteProvider;
             this.ConnectionName = connectionName;
@@ -44,6 +48,8 @@ namespace Schubert.Framework.Data
             this.TablesForCheckingDatabaseExists = tablesForCheck ?? Enumerable.Empty<String>();
             this.IsDefault = isDefaultContext;
             this.ConnectionString = connectionString;
+            this.UsePool = usePool;
+            this.PoolSize = Math.Max(2, poolSize);
         }
 
         public IEnumerable<String> TablesForCheckingDatabaseExists { get; }
@@ -54,9 +60,13 @@ namespace Schubert.Framework.Data
         public bool IncludeServiceEntities { get; }
 
 
-        public String ConnectionName { get; }
+        public string ConnectionName { get; }
 
-        public String ConnectionString { get; }
+        public string ConnectionString { get; }
+
+        public bool UsePool { get; }
+
+        public int PoolSize { get; }
 
         /// <summary>
         /// 获取迁移程序集的名称。

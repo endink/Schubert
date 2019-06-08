@@ -6,32 +6,24 @@ using System.Linq;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Schubert.Framework.Data.EntityFramework;
 
 namespace Schubert.Framework.Data
 {
     public class DefaultDbContext : DbContext, INewDatabaseFlag
     {
-        private IDatabaseInitializer _databaseInitializer = null;
-
         public bool IsNew { get; set; }
 
-        public DefaultDbContext(DbContextOptions options, IDatabaseInitializer databaseInitializer)
+        public DefaultDbContext(DbContextOptions options)
             :base(options)
         {
-            Guard.ArgumentNotNull(databaseInitializer, nameof(databaseInitializer));
-            _databaseInitializer = databaseInitializer;
-            _databaseInitializer.InitializeContext(this);
+            //DatabaseInitializer.Default.InitializeContext(this);
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            _databaseInitializer.CreateModel(modelBuilder, this);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
+            this.GetDbProvider()?.OnCreateModel(modelBuilder, this.GetDbOptions());
         }
     }
 }

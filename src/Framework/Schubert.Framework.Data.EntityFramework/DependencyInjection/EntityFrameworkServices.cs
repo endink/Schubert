@@ -9,6 +9,7 @@ using Schubert.Framework.Environment;
 using Schubert.Framework.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
 using Schubert.Framework.Data.Providers;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Schubert.Framework.DependencyInjection
 {
@@ -18,12 +19,12 @@ namespace Schubert.Framework.DependencyInjection
         {
             Guard.ArgumentNotNull(options, nameof(options));
             
-            yield return ServiceDescriber.Singleton<IDatabaseInitializer, DatabaseInitializer>();
             yield return ServiceDescriber.Scoped(typeof(IRepository<>), typeof(Repository<>));
             yield return ServiceDescriber.Scoped(typeof(IRepository<,>), typeof(Repository<,>));
-            yield return ServiceDescriber.Singleton<IDatabaseInitializer, DatabaseInitializer>();
             yield return ServiceDescriber.Scoped(typeof(IMigrationsAssembly), typeof(MigrationFinder), SmartOptions.Replace);
-            yield return ServiceDescriber.Singleton(typeof(ICoreConventionSetBuilder), typeof(SchubertConventionSetBuilder), SmartOptions.Replace);
+
+            yield return ServiceDescriber.Singleton(typeof(IModelCustomizer), typeof(SchubertModelCustomizer), SmartOptions.Append);
+            yield return ServiceDescriber.Singleton(typeof(ICoreConventionSetBuilder), typeof(SchubertConventionSetBuilder), SmartOptions.Append);
 
             yield return ServiceDescriber.Scoped<ILanguageService, LanguageService>();
 

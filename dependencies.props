@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>3.1</VersionPrefix>
+    <VersionPrefix>3.2</VersionPrefix>
     <ExperimentalProjectVersionPrefix>0.1.0</ExperimentalProjectVersionPrefix>
     <VersionSuffix>beta4-05010000</VersionSuffix>
     <PackageVersion Condition="'$(VersionSuffix)' == 'rtm' ">$(VersionPrefix)</PackageVersion>
@@ -22,13 +22,13 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
   </PropertyGroup>
   <PropertyGroup>
-    <AspNetCorePackageVersion>2.1.1</AspNetCorePackageVersion>
-    <MicrosoftExtensionPackageVersion>2.1.1</MicrosoftExtensionPackageVersion>
-    <EntityFrameworkPackageVersion>2.1.2</EntityFrameworkPackageVersion>
+    <AspNetCorePackageVersion>2.2.0</AspNetCorePackageVersion>
+    <MicrosoftExtensionPackageVersion>2.2.0</MicrosoftExtensionPackageVersion>
+    <EntityFrameworkPackageVersion>2.2.0</EntityFrameworkPackageVersion>
     <DotNetCorePackageVersion>4.5.0</DotNetCorePackageVersion>
     <SystemPackageVersion>4.3.0</SystemPackageVersion>
-    <IdentityStorePackageVersion>2.1.3</IdentityStorePackageVersion>
-    <NetStandardLibVersion>2.0.3</NetStandardLibVersion>
+    <IdentityStorePackageVersion>2.2.0</IdentityStorePackageVersion>
+    <NetStandardLibVersion>2.2.0</NetStandardLibVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <DefineConstants>$(DefineConstants);NETFX</DefineConstants>

@@ -11,6 +11,8 @@ namespace Schubert.Framework.Data
         private string _migrationAssembly;
         private String[] _tables;
         private String _connectionString;
+        private bool _userPool = true;
+        private int _poolSize = System.Environment.ProcessorCount * 2;
 
 
         internal DbContextSettingsBuilder(String connectionStringName, String connectionString)
@@ -77,9 +79,35 @@ namespace Schubert.Framework.Data
             return this;
         }
 
+        /// <summary>
+        /// 使使用使用 Context 池。
+        /// </summary>
+        /// <param name="enable"></param>
+        /// <param name="poolSize"></param>
+        /// <returns></returns>
+        public DbContextSettingsBuilder UsePool(bool enable, int poolSize)
+        {
+            _userPool = enable;
+            _poolSize = poolSize;
+            return this;
+        }
+
+        public DbContextSettingsBuilder UsePool(bool enable)
+        {
+            _userPool = enable;
+            return this;
+        }
+
         internal DbContextSettings Build()
         {
-            return new DbContextSettings(this.ConnectionName, _migrationAssembly, _includeServiceEntities, _dbProvider, _tables, this.IsDefaultDbContext, _connectionString);
+            return new DbContextSettings(this.ConnectionName, 
+                _migrationAssembly, 
+                _includeServiceEntities, 
+                _dbProvider, _tables, 
+                this.IsDefaultDbContext, 
+                _connectionString,
+                _userPool,
+                _poolSize);
         }
     }
 }

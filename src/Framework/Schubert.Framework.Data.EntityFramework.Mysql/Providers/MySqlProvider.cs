@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
-using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.DependencyInjection;
-using MySql.Data.EntityFrameworkCore.Extensions;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Data.Common;
+using System.Linq;
 
 namespace Schubert.Framework.Data.Providers
 {
@@ -30,6 +27,10 @@ namespace Schubert.Framework.Data.Providers
 
         public PropertyBuilder<String> StringColumnLength(PropertyBuilder<String> pb, int length)
         {
+            if (length > 16383)
+            {
+                pb.HasColumnType("text");
+            }
             if (length > 21844)
             {
                 if (length > 5592404)
@@ -68,7 +69,8 @@ namespace Schubert.Framework.Data.Providers
 
         public void OnAddDependencies(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddEntityFrameworkMySQL();
+            serviceCollection.AddEntityFrameworkMySql();
+            //serviceCollection.AddEntityFrameworkMySQL();
         }
 
         public virtual void OnBuildContext(Type dbContextType, DbContextOptionsBuilder builder, DbOptions options)
@@ -76,7 +78,7 @@ namespace Schubert.Framework.Data.Providers
             string connectionString = options.GetConnectionString(dbContextType);
             string assembly = options.GetMigrationAssembly(dbContextType);
             
-            builder.UseMySQL(connectionString,
+            builder.UseMySql(connectionString,
                 b => 
                 {
                     b.MigrationsAssembly(assembly);

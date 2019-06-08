@@ -65,43 +65,43 @@ namespace Schubert.Framework.Data
     {
         public static bool IsDefaultContext(this DbOptions options, Type dbContextType)
         {
-            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => Data.DbContextSettings.CreateDefault(options.DefaultConnectionName));
+            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => DbContextSettings.CreateDefault(options.DefaultConnectionName));
             return settings.IsDefault;
         }
 
         public static IDbProvider GetDbProvider(this DbOptions options, Type dbContextType)
         {
-            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => Data.DbContextSettings.CreateDefault(options.DefaultConnectionName));
+            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => DbContextSettings.CreateDefault(options.DefaultConnectionName));
             return settings.DbProvider;
         }
 
         public static bool IncludeBuiltinEntities(this DbOptions options, Type dbContextType)
         {
-            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => Data.DbContextSettings.CreateDefault(options.DefaultConnectionName));
+            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => DbContextSettings.CreateDefault(options.DefaultConnectionName));
             return settings.IncludeServiceEntities;
         }
 
         public static String GetConnectionStringName(this DbOptions options, Type dbContextType)
         {
-            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => Data.DbContextSettings.CreateDefault(options.DefaultConnectionName));
+            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => DbContextSettings.CreateDefault(options.DefaultConnectionName));
             return settings.ConnectionName;
         }
 
         public static String GetConnectionString(this DbOptions options, Type dbContextType)
         {
-            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => Data.DbContextSettings.CreateDefault(options.DefaultConnectionName));
+            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => DbContextSettings.CreateDefault(options.DefaultConnectionName));
             return settings.ConnectionString.IfNullOrWhiteSpace(options.GetConnectionString(settings.ConnectionName));
         }
 
         public static String GetMigrationAssembly(this DbOptions options, Type dbContextType)
         {
-            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => Data.DbContextSettings.CreateDefault(options.DefaultConnectionName));
+            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => DbContextSettings.CreateDefault(options.DefaultConnectionName));
             return settings.MigrationAssembly.IfNullOrWhiteSpace(dbContextType.GetTypeInfo().Assembly.FullName);
         }
 
         public static IEnumerable<String> GetTablesForChecking(this DbOptions options, Type dbContextType)
         {
-            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => Data.DbContextSettings.CreateDefault(options.DefaultConnectionName));
+            var settings = options.DbContextSettings.GetOrDefault(dbContextType, () => DbContextSettings.CreateDefault(options.DefaultConnectionName));
             return settings.TablesForCheckingDatabaseExists;
         }
     }

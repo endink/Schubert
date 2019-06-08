@@ -21,7 +21,7 @@ namespace Schubert.Framework.Data.Mappings
             
             builder.Property(r => r.Name).IsRequired().HasMaxLength(256);
             builder.Property(r => r.Region).IsRequired().HasMaxLength(64);
-            builder.Property(r => r.RawValue).HasMaxLength(int.MaxValue);
+            builder.Property(r => r.RawValue).HasMaxLength(65532, this.DbProvider);
             builder.Property(r => r.Id).HasMaxLength(40);
         }
     }
